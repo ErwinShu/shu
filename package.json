@@ -1,0 +1,19 @@
+{
+  "name": "shu",
+  "version": "1.0.0",
+  "description": "library for javascript",
+  "main": "shu.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ErwinShu/shu.git"
+  },
+  "author": "chenshu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ErwinShu/shu/issues"
+  },
+  "homepage": "https://github.com/ErwinShu/shu#readme"
+}
