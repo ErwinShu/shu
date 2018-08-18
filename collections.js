@@ -1,36 +1,37 @@
 const collections = {
     each: function(obj, callback, context) {
-        const _callback = context ? callback.bind(context) : callback;
-        if (obj instanceof Array) {
-            for (let i = 0; i < obj.length; i++) {
-              _callback(obj[i]);
-            }
-        } else {
-            const keys = Object.keys(obj);
-            for (let i = 0; i < keys.length; i++) {
-              _callback(obj[keys[i]]);
-            }
+      const _callback = context ? callback.bind(context) : callback;
+      if (obj instanceof Array) {
+        for (let i = 0; i < obj.length; i++) {
+          _callback(obj[i]);
         }
-        return obj;
+      } else {
+        const keys = Object.keys(obj);
+        for (let i = 0; i < keys.length; i++) {
+          _callback(obj[keys[i]]);
+        }
+      }
+      return obj;
     },
 
     map: function(obj, callback, context) {
-        const _callback = context ? callback.bind(context) : callback;
-        if (obj instanceof Array) {
-            let result = [];
-            for (let i = 0; i < obj.length; i++) {
-                result.push(_callback(obj[i]));
-            }
-            return result;
-        } else {
-            const keys = Object.keys(obj);
-            const result = {};
-            for (let i = 0; i < keys.length; i++) {
-                result[keys[i]] = _callback(obj[keys[i]]);
-            }
-            return result;
+      if (!callback) return obj;
+      const _callback = context ? callback.bind(context) : callback;
+      if (obj instanceof Array) {
+        let result = [];
+        for (let i = 0; i < obj.length; i++) {
+          result.push(_callback(obj[i]));
         }
-    },,
+        return result;
+      } else {
+        const keys = Object.keys(obj);
+        const result = {};
+        for (let i = 0; i < keys.length; i++) {
+          result[keys[i]] = _callback(obj[keys[i]]);
+        }
+        return result;
+      }
+    },
 
     reduce: function (obj, callback, initialValue, context) {
       const _callback = context ? callback.bind(context) : callback;
@@ -235,7 +236,147 @@ const collections = {
       return result;
     },
 
-    max: function (list, callback) {
+    max： function (list, callback, context) {
+      let _callback = context ? callback.bind(context) : callback;
+      if (!_callback) {
+        _callback = item => item;
+      }
+      let result = -Infinity;
+      for (let i = 0; i < list.length; i++) {
+        const value = _callback(list[i], i, list);
+        if (value > result) {
+          result = value;
+        }
+      }
+      return result;
+    }，
+
+    min： function (list, callback, context) {
+      let _callback = context ? callback.bind(context) : callback;
+      if (!_callback) {
+        _callback = item => item;
+      }
+      let result = Infinity;
+      for (let i = 0; i < list.length; i++) {
+        const value = _callback(list[i], i, list);
+        if (value < result) {
+          result = value;
+        }
+      }
+      return result;
+    }，
+
+    sortBy： function (list, callback, context) {
+      const _callback = context ? callback.bind(context) : callback;
+
+    }，
+
+    groupBy： function (list, callback, context) {
+      let _callback = context ? callback.bind(context) : callback;
+      if (!(list instanceof Array)) {
+        return {};
+      } else if (typeof _callback === 'string') {
+        _callback = (item) => {
+          if (item instanceof Object) {
+            return item[callback];
+          }
+        }
+      }
+      let result = {};
+      for (let i = 0; i < list.length; i++) {
+        const key = _callback(list[i], i, list);
+        if (result[key]) {
+          result[key] = [...result[key], list[i]];
+        } else {
+          result[key] = [list[i]];
+        }
+      }
+      return result;
+    }，
+
+    indexBy： function (list, callback, context) {
+      let _callback = context ? callback.bind(context) : callback;
+      if (!(list instanceof Array)) {
+        return {};
+      } else if (typeof _callback === 'string') {
+        _callback = (item) => {
+          if (item instanceof Object) {
+            return item[callback];
+          }
+        }
+      }
+      let result = {};
+      for (let i = 0; i < list.length; i++) {
+        const key = _callback(list[i], i, list);
+        result[key] = list[i];
+      }
+      return result;
+    }，
+
+    countBy： function (list, callback, context) {
+      let _callback = context ? callback.bind(context) : callback;
+      if (!(list instanceof Array)) {
+        return {};
+      } else if (typeof _callback === 'string') {
+        _callback = (item) => {
+          if (item instanceof Object) {
+            return item[callback];
+          }
+        }
+      }
+      let result = {};
+      for (let i = 0; i < list.length; i++) {
+        const key = _callback(list[i], i, list);
+        if (result[key]) {
+          result[key] += 1;
+        } else {
+          result[key] = 1;
+        }
+      }
+      return result;
+    }，
+
+    shuffle： function (list) {
+      const result = list instanceof Array ? [...list] : Object.values(list);
+      for (let i = 0; i < result.length; i++) {
+        const index = Math.floor(Math.random() * result.length);
+        [result[i], result[index]] = [result[index], result[i]];
+      }
+      return result;
+    }，
+
+    sample： function (list, n) {
+      const random = (list) => Math.floor(Math.random() * list.length);
+      if (n === undefined) return list[random(list)];
+      let result = [];
+      let keyList = [];
+      const length = list.length > n ? n : list.length;
+      for (let i = 0; i < length; i++) {
+        let key = random(list);
+        while (keyList.includes(key)) {
+          key = random(list);
+        }
+        keyList.push(key);
+        result.push(list[key]);
+      }
+      return result;
+    }，
+
+    toArray： function (list) {
+
+    }，
+
+    size： function (obj) {
+      if (typeof obj !== 'object') {
+        return 0;
+      } else if (obj instanceof Array) {
+        return obj.length;
+      } else {
+        return Object.keys(obj).length;
+      }
+    }，
+
+    partition： function (list, type) {
 
     },
 };
