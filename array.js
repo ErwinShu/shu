@@ -34,7 +34,7 @@ const array = {
     return result;
   },
 
-  rest: function(list, length = 1) {s
+  rest: function(list, length = 1) {
     if (!(list instanceof Array)) return undefined;
     let result = [];
     for (let i = length; i < list.length; i++) {
