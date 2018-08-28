@@ -220,7 +220,7 @@ const collections = {
     },
 
     invoke: function (list, callback, argument) {
-
+      
     },
 
     pluck: function (list, key) {
@@ -236,7 +236,7 @@ const collections = {
       return result;
     },
 
-    max： function (list, callback, context) {
+    max: function (list, callback, context) {
       let _callback = context ? callback.bind(context) : callback;
       if (!_callback) {
         _callback = item => item;
@@ -249,9 +249,9 @@ const collections = {
         }
       }
       return result;
-    }，
+    },
 
-    min： function (list, callback, context) {
+    min: function (list, callback, context) {
       let _callback = context ? callback.bind(context) : callback;
       if (!_callback) {
         _callback = item => item;
@@ -264,14 +264,32 @@ const collections = {
         }
       }
       return result;
-    }，
+    },
 
-    sortBy： function (list, callback, context) {
-      const _callback = context ? callback.bind(context) : callback;
+    sortBy: function (list, callback, context) {
+      if (!(list instanceof Array)) return [];
+      const _callback = callback || ((a, b) => a < b);
+      const __callback = context ? _callback.bind(context) : _callback;
+      const _list = [...list];
+      function sort(array, left, right, func) {
+        if (left >= right) return null;
+        const base = array[right];
+        let index = left;
+        for (let i = left; i < right; i++) {
+          if (func(array[i], base)) {
+            [array[index], array[i]] = [array[i], array[index]];
+            index++;
+          }
+        }
+        [array[index], array[right]] = [array[right], array[index]];
+        sort(array, left, index - 1, func);
+        sort(array, index + 1, right, func);
+      }
+      sort(_list, 0, list.length - 1, __callback);
+      return _list;
+    },
 
-    }，
-
-    groupBy： function (list, callback, context) {
+    groupBy: function (list, callback, context) {
       let _callback = context ? callback.bind(context) : callback;
       if (!(list instanceof Array)) {
         return {};
@@ -292,9 +310,9 @@ const collections = {
         }
       }
       return result;
-    }，
+    },
 
-    indexBy： function (list, callback, context) {
+    indexBy: function (list, callback, context) {
       let _callback = context ? callback.bind(context) : callback;
       if (!(list instanceof Array)) {
         return {};
@@ -311,9 +329,9 @@ const collections = {
         result[key] = list[i];
       }
       return result;
-    }，
+    },
 
-    countBy： function (list, callback, context) {
+    countBy: function (list, callback, context) {
       let _callback = context ? callback.bind(context) : callback;
       if (!(list instanceof Array)) {
         return {};
@@ -334,18 +352,18 @@ const collections = {
         }
       }
       return result;
-    }，
+    },
 
-    shuffle： function (list) {
+    shuffle: function (list) {
       const result = list instanceof Array ? [...list] : Object.values(list);
       for (let i = 0; i < result.length; i++) {
         const index = Math.floor(Math.random() * result.length);
         [result[i], result[index]] = [result[index], result[i]];
       }
       return result;
-    }，
+    },
 
-    sample： function (list, n) {
+    sample: function (list, n) {
       const random = (list) => Math.floor(Math.random() * list.length);
       if (n === undefined) return list[random(list)];
       let result = [];
@@ -360,13 +378,13 @@ const collections = {
         result.push(list[key]);
       }
       return result;
-    }，
+    },
 
-    toArray： function (list) {
+    toArray: function (list) {
+      return Array.from(list);
+    },
 
-    }，
-
-    size： function (obj) {
+    size: function (obj) {
       if (typeof obj !== 'object') {
         return 0;
       } else if (obj instanceof Array) {
@@ -374,9 +392,9 @@ const collections = {
       } else {
         return Object.keys(obj).length;
       }
-    }，
+    },
 
-    partition： function (list, type) {
+    partition: function (list, type) {
 
     },
 };
