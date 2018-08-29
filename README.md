@@ -1,4 +1,4 @@
-# shu javascript library
+# Shu Javascript Library
 
 ## 1. 说明
 
