@@ -1,3 +1,5 @@
+const _ = require('./shu.js');
+
 const array = {
   first: function (list, length = 1) {
     if (!(list instanceof Array)) {

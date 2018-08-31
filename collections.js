@@ -1,3 +1,5 @@
+const _ = require('./shu.js');
+
 const collections = {
   each: function(obj, callback, context) {
     const _callback = context ? callback.bind(context) : callback;

@@ -1,3 +1,5 @@
+const _ = require('./shu.js');
+
 const chainning = {
   chain: function () {
     

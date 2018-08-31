@@ -1,3 +1,5 @@
+const _ = require('./shu.js');
+
 const utility = {
   noConflict() {
 
