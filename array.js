@@ -128,36 +128,145 @@ const array = {
     return result; 
   },
 
-  difference: function () {
+  difference: function (list, ...rest) {
+    if (!(list instanceof Array)) return [];
+    let jumpList = [];
+    let result = [];
+    for (value of rest) {
+      jumpList.push(...value);
+    }
+    for (item of list) {
+      if (!_.contains(jumpList, item)) {
+        result.push(item);
+      }
+    }
+    return result;
+  },
+
+  uniq: function (list, hasSort, callback) {
+    if (!(list instanceof Array)) return [];
+    const _callback = callback || (data => data);
+    let result = [];
+    let jumpList = [];
+    for (let i = 0; i < list.length; i++) {
+      if (_.contains(jumpList, i)) {
+        continue;
+      } else {
+        if (hasSort) {
+          _callback(list[i]) === _callback(list[i + 1]) && jumpList.push(i + 1);
+          result.push(list[i])
+        } else {
+          for (let j = i + 1; j < list.length; j++) {
+            _callback(list[i]) === _callback(list[j]) && jumpList.push(j);
+          }
+          result.push(list[i]);
+        }
+      }
+    }
+    return result;
+  },
+
+  zip: function (...res) {
+    let result = [];
+    let length = 0;
+    for (list of res) {
+      if (list.length > length) {
+        length = list.length;
+      }
+    }
+    for (let i = 0; i < res.length; i++) {
+      for (let j = 0; j < length; j++) {
+        if (!!result[j]) {
+          result[j].push(res[i][j]);
+        } else {
+          result.push([]);
+          result[j].push(res[i][j]);
+        }
+      }
+    }
+    return result;
+  },
+
+  unzip: function (list) {
+    if (!(list instanceof Array)) return [];
+    let result = [];
+    for (let i = 0; i < list.length; i++) {
+      for (let j = 0; j < list[i].length; j++) {
+        if (!!result[j]) {
+          result[j].push(list[i][j]);
+        } else {
+          result.push([]);
+          result[j].push(list[i][j]);
+        }
+      }
+    }
+    return result;
+  },
+
+  object: function (list, values) {
+    if (!(list instanceof Array)) return {};
+    let result = {};
+    if (values) {
+      for (let i = 0; i < list.length; i++) {
+        result[list[i]] = values[i];
+      }
+    } else {
+      for (item of list) {
+        result[item[0]] = item[1];
+      }
+    }
+    return result;
+  },
+
+  chunk: function (list, length) {
     
   },
 
-  uniq: function () {
-    
+  indexOf: function (list, value, hasSort) {
+    if (!(list instanceof Array)) return -1;
+    let result = -1;
+    for (let i = 0; i < list.length; i++) {
+      if (list[i] === value) {
+        return i;
+      }
+    }
+    return result;
   },
 
-  zip: function () {
-    
-  },
-
-  object: function () {
-    
-  },
-
-  indexOf: function () {
-    
-  },
-
-  lastIndexOf: function () {
-    
+  lastIndexOf: function (list, value, hasSort) {
+    if (!(list instanceof Array)) return -1;
+    let result = -1;
+    for (let i = list.length - 1; i >= 0; i--) {
+      if (list[i] === value) {
+        return i;
+      }
+    }
+    return result;
   },
 
   sortedIndex: function () {
     
   },
 
-  range: function () {
+  findIndex: function () {
     
+  },
+
+  findLastIndex: function () {
+    
+  },
+
+  range: function (start, stop, step) {
+    const _stop = arguments.length === 1 ? start : stop;
+    const _start = arguments.length === 1 ? 0 : start;
+    const _step = step || 0;
+    let result = [];
+    let value = _start;
+    while (_value <= _stop) {
+      result.push(value);
+      value += _step;
+    }
+    return result;
   },
   
 };

@@ -383,7 +383,7 @@ const collections = {
   },
 
   toArray: function (list) {
-    return Array.from(list);
+    return [...list];
   },
 
   size: function (obj) {

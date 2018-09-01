@@ -47,10 +47,14 @@ array.js                            数组类方法
     - difference
     - uniq
     - zip
+    - unzip
     - object
+    - chunk
     - indexOf
     - lastIndexOf
     - sortedIndex
+    - findIndex
+    - findLastIndex
     - range
 
 functions.js                        函数类方法
