@@ -219,24 +219,54 @@ const array = {
   },
 
   chunk: function (list, length) {
-    
+    if (!(list instanceof Array) || typeof length !== 'number' || length < 1) return [];
+    let result = [];
+    let item = [];
+    for (let i = 0; i < list.length; i++) {
+      if (item.length < length) {
+        item.push(list[i]);
+      } else {
+        item = [list[i]];
+      }
+      if (item.length >= length || i === list.length - 1) {
+        result.push(item);
+      }
+    }
+    return result;
   },
 
   indexOf: function (list, value, hasSort) {
     if (!(list instanceof Array)) return -1;
     let result = -1;
-    for (let i = 0; i < list.length; i++) {
-      if (list[i] === value) {
-        return i;
+    if (hasSort) {
+      function findIndex(list, value, start, end) { // 二分法查找
+        const middle = Math.floor((start + end) / 2);
+        if (list[middle] === value) {
+          return middle;
+        } else if (list[middle] > value) {
+          return findIndex(list, value, start, middle - 1);
+        } else if (list[middle] < value) {
+          return findIndex(list, value, middle + 1, end);
+        } else {
+          return -1;
+        }
       }
+      return findIndex(list, value, 0, list.length - 1);
+    } else {
+      for (let i = 0; i < list.length; i++) {
+        if (list[i] === value) {
+          return i;
+        }
+      }
+      return result;
     }
-    return result;
   },
 
-  lastIndexOf: function (list, value, hasSort) {
+  lastIndexOf: function (list, value, lastIndex) {
     if (!(list instanceof Array)) return -1;
+    const _lastIndex = typeof lastIndex === 'number' ? lastIndex : 0;
     let result = -1;
-    for (let i = list.length - 1; i >= 0; i--) {
+    for (let i = list.length - 1 - _lastIndex; i >= 0; i--) {
       if (list[i] === value) {
         return i;
       }
@@ -244,16 +274,36 @@ const array = {
     return result;
   },
 
-  sortedIndex: function () {
-    
+  sortedIndex: function (list, value, callback, context) {
+    if (!(list instanceof Array)) return 0;
+    const _callback = callback ?
+      (typeof callback === 'age' ? item => item[callback] : callback)
+      : item => item;
+    const __callback = context ? _callback.bind(context) : _callback;
+    for (let i = 0; i < list.length; i++) {
+      if (__callback(value) < __callback(list[i])) {
+        return i;
+      }
+    }
+    return list.length;
   },
 
-  findIndex: function () {
-    
+  findIndex: function (list, callback, context) {
+    if (!(list instanceof Array) || !(callback instanceof Function)) return -1;
+    const _callback = context ? callback.bind(context) : callback;
+    for (let i = 0; i < list.length; i++) {
+      if (_callback(list[i], i, list)) return i;
+    }
+    return -1;
   },
 
-  findLastIndex: function () {
-    
+  findLastIndex: function (list, callback, context) {
+    if (!(list instanceof Array) || !(callback instanceof Function)) return -1;
+    const _callback = context ? callback.bind(context) : callback;
+    for (let i = list.length - 1; i >= 0; i++) {
+      if (_callback(list[i], i, list)) return i;
+    }
+    return -1;
   },
 
   range: function (start, stop, step) {
