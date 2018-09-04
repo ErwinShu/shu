@@ -3,12 +3,12 @@ const _ = require('./shu.js');
 const collections = {
   each: function(obj, callback, context) {
     const _callback = context ? callback.bind(context) : callback;
-    if (obj instanceof Array) {
+    if (_.isArray(obj)) {
       for (let i = 0; i < obj.length; i++) {
         _callback(obj[i]);
       }
     } else {
-      const keys = Object.keys(obj);
+      const keys = _.keys(obj);
       for (let i = 0; i < keys.length; i++) {
         _callback(obj[keys[i]]);
       }
@@ -19,14 +19,14 @@ const collections = {
   map: function(obj, callback, context) {
     if (!callback) return obj;
     const _callback = context ? callback.bind(context) : callback;
-    if (obj instanceof Array) {
+    if (_.isArray(obj)) {
       let result = [];
       for (let i = 0; i < obj.length; i++) {
         result.push(_callback(obj[i]));
       }
       return result;
     } else {
-      const keys = Object.keys(obj);
+      const keys = _.keys(obj);
       const result = {};
       for (let i = 0; i < keys.length; i++) {
         result[keys[i]] = _callback(obj[keys[i]]);
@@ -37,7 +37,7 @@ const collections = {
 
   reduce: function (obj, callback, initialValue, context) {
     const _callback = context ? callback.bind(context) : callback;
-    if (obj instanceof Array) {
+    if (_.isArray(obj)) {
       if (obj.length <= 1) return obj;
       let result = initialValue || obj[0];
       for (let i = initialValue ? 0 : 1; i < obj.length; i++) {
@@ -45,7 +45,7 @@ const collections = {
       }
       return result;
     } else {
-      const keys = Object.keys(obj);
+      const keys = _.keys(obj);
       if (keys.length <= 1) return obj;
       let result = initialValue || obj[keys[0]];
       for (let i = initialValue ? 0 : 1; i < keys.length; i++) {
@@ -57,7 +57,7 @@ const collections = {
 
   reduceRight: function (obj, callback, initialValue, context) {
     const _callback = context ? callback.bind(context) : callback;
-    if (obj instanceof Array) {
+    if (_.isArray(obj)) {
       const length = obj.length;
       if (length <= 1) return obj;
       let result = initialValue || obj[length - 1];
@@ -66,7 +66,7 @@ const collections = {
       }
       return result;
     } else {
-      const keys = Object.keys(obj);
+      const keys = _.keys(obj);
       const length = keys.length;
       if (length <= 1) return obj;
       let result = initialValue || obj[keys[length - 1]];
@@ -79,14 +79,14 @@ const collections = {
 
   find: function (obj, callback, context) {
     const _callback = context ? callback.bind(context) : callback;
-    if (obj instanceof Array) {
+    if (_.isArray(obj)) {
       for (let i = 0; i < obj.length; i++) {
         if (_callback(obj[i], i, obj)) {
           return obj[i];
         }
       }
     } else {
-      const keys = Object.keys(obj);
+      const keys = _.keys(obj);
       for (let i = 0; i < keys.length; i++) {
         if (_callback(obj[keys[i]], keys[i], obj)) {
           return obj[keys[i]];
@@ -97,7 +97,7 @@ const collections = {
 
   filter: function (obj, callback, context) {
     const _callback = context ? callback.bind(context) : callback;
-    if (obj instanceof Array) {
+    if (_.isArray(obj)) {
       let result = [];
       for (let i = 0; i < obj.length; i++) {
         if (_callback(obj[i], i, obj)) {
@@ -107,7 +107,7 @@ const collections = {
       return result;
     } else {
       const result = {};
-      const keys = Object.keys(obj);
+      const keys = _.keys(obj);
       for (let i = 0; i < keys.length; i++) {
         if (_callback(obj[keys[i]], keys[i], obj)) {
           result[keys[i]] = obj[keys[i]];
@@ -118,10 +118,10 @@ const collections = {
   },
 
   where: function (list, option) {
-    if (!(list instanceof Array)) return [];
+    if (!(_.isArray(list))) return [];
     let result = [];
     const check = function (obj, opt) {
-      const keys = Object.keys(opt);
+      const keys = _.keys(opt);
       for (let i = 0; i < keys.length; i++) {
         if (obj[keys[i]] !== opt[keys[i]]) {
           return false;
@@ -138,9 +138,9 @@ const collections = {
   },
 
   findWhere: function (list, option) {
-    if (!(list instanceof Array)) return;
+    if (!(_.isArray(list))) return;
     for (let i = 0; i < list.length; i++) {
-      const keys = Object.keys(option);
+      const keys = _.keys(option);
       for (let i = 0; i < keys.length; i++) {
         if (list[i][keys[i]] === option[keys[i]]) {
           return list[i];
@@ -151,7 +151,7 @@ const collections = {
 
   reject: function (obj, callback, context) {
     const _callback = context ? callback.bind(context) : callback;
-    if (obj instanceof Array) {
+    if (_.isArray(obj)) {
       let result = [];
       for (let i = 0; i < obj.length; i++) {
         if (!_callback(obj[i], i, obj)) {
@@ -161,7 +161,7 @@ const collections = {
       return result;
     } else {
       const result = {};
-      const keys = Object.keys(obj);
+      const keys = _.keys(obj);
       for (let i = 0; i < keys.length; i++) {
         if (!_callback(obj[keys[i]], keys[i], obj)) {
           result[keys[i]] = obj[keys[i]];
@@ -173,7 +173,7 @@ const collections = {
 
   every: function (obj, callback, context) {
     const _callback = context ? callback.bind(context) : callback;
-    if (obj instanceof Array) {
+    if (_.isArray(obj)) {
       for (let i = 0; i < obj.length; i++) {
         if (!_callback(obj[i], i, obj)) {
           return false;
@@ -181,7 +181,7 @@ const collections = {
       }
       return true;
     } else {
-      const keys = Object.keys(obj);
+      const keys = _.keys(obj);
       for (let i = 0; i < keys.length; i++) {
         if (!_callback(obj[keys[i]], keys[i], obj)) {
           return false;
@@ -193,7 +193,7 @@ const collections = {
 
   some: function (obj, callback, context) {
     const _callback = context ? callback.bind(context) : callback;
-    if (obj instanceof Array) {
+    if (_.isArray(obj)) {
       for (let i = 0; i < obj.length; i++) {
         if (_callback(obj[i], i, obj)) {
           return true;
@@ -201,7 +201,7 @@ const collections = {
       }
       return false;
     } else {
-      const keys = Object.keys(obj);
+      const keys = _.keys(obj);
       for (let i = 0; i < keys.length; i++) {
         if (_callback(obj[keys[i]], keys[i], obj)) {
           return true;
@@ -212,7 +212,7 @@ const collections = {
   },
 
   contains: function (list, value) {
-    if (!(list instanceof Array)) return false;
+    if (!(_.isArray(list))) return false;
     for (let i = 0; i < list.length; i++) {
       if (list[i] === value) {
         return true;
@@ -221,19 +221,20 @@ const collections = {
     return false;
   },
 
-  invoke: function (list, callback, argument) {
-    
+  invoke: function (list, callback, ...argument) {
+    if (!_.isObject(list)) return [];
+    const result = _.map(list, function(item) {
+      const _callback = _.isFunction(callback) ? callback : item[callback];
+      return _callback && _callback.call(item, ...argument);
+    });
+    return result;
   },
 
   pluck: function (list, key) {
-    if (!(list instanceof Array)) return [];
+    if (!(_.isArray(list))) return [];
     let result = [];
     for (let value of list) {
-      if (typeof value === 'object') {
-        result.push(value[key]);
-      } else {
-        result.push(undefined);
-      }
+      result.push(value[key]);
     }
     return result;
   },
@@ -269,7 +270,7 @@ const collections = {
   },
 
   sortBy: function (list, callback, context) {
-    if (!(list instanceof Array)) return [];
+    if (!(_.isArray(list))) return [];
     const _callback = callback || ((a, b) => a < b);
     const __callback = context ? _callback.bind(context) : _callback;
     const _list = [...list];
@@ -293,11 +294,11 @@ const collections = {
 
   groupBy: function (list, callback, context) {
     let _callback = context ? callback.bind(context) : callback;
-    if (!(list instanceof Array)) {
+    if (!(_.isArray(list))) {
       return {};
-    } else if (typeof _callback === 'string') {
+    } else if (_.isString(_callback)) {
       _callback = (item) => {
-        if (item instanceof Object) {
+        if (_.isObject(item)) {
           return item[callback];
         }
       }
@@ -316,11 +317,11 @@ const collections = {
 
   indexBy: function (list, callback, context) {
     let _callback = context ? callback.bind(context) : callback;
-    if (!(list instanceof Array)) {
+    if (!(_.isArray(list))) {
       return {};
-    } else if (typeof _callback === 'string') {
+    } else if (_.isString(_callback)) {
       _callback = (item) => {
-        if (item instanceof Object) {
+        if (_.isObject(item)) {
           return item[callback];
         }
       }
@@ -335,11 +336,11 @@ const collections = {
 
   countBy: function (list, callback, context) {
     let _callback = context ? callback.bind(context) : callback;
-    if (!(list instanceof Array)) {
+    if (!(_.isArray(list))) {
       return {};
-    } else if (typeof _callback === 'string') {
+    } else if (_.isString(_callback)) {
       _callback = (item) => {
-        if (item instanceof Object) {
+        if (_.isObject(item)) {
           return item[callback];
         }
       }
@@ -357,7 +358,7 @@ const collections = {
   },
 
   shuffle: function (list) {
-    const result = list instanceof Array ? [...list] : Object.values(list);
+    const result = _.isArray(list) ? [...list] : _.values(list);
     for (let i = 0; i < result.length; i++) {
       const index = Math.floor(Math.random() * result.length);
       [result[i], result[index]] = [result[index], result[i]];
@@ -387,17 +388,26 @@ const collections = {
   },
 
   size: function (obj) {
-    if (typeof obj !== 'object') {
+    if (_.isObject(obj)) {
       return 0;
-    } else if (obj instanceof Array) {
+    } else if (_.isArray(obj)) {
       return obj.length;
     } else {
-      return Object.keys(obj).length;
+      return _.keys(obj).length;
     }
   },
 
-  partition: function (list, type) {
-
+  partition: function (list, callback) {
+    const _callback = callback || (data => data);
+    let result = [[]];
+    for (value of list) {
+      if (_callback(value)) {
+        result[0].push(value);
+      } else {
+        result[1].push(value);
+      }
+    }
+    return result;
   },
     
 };

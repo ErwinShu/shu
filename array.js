@@ -2,7 +2,7 @@ const _ = require('./shu.js');
 
 const array = {
   first: function (list, length = 1) {
-    if (!(list instanceof Array)) {
+    if (!(_.isArray(list))) {
       return undefined;
     } else if (length === 1) {
       return list[0];
@@ -15,7 +15,7 @@ const array = {
   },
 
   initial: function(list, length = 1) {
-    if (!(list instanceof Array)) return undefined;
+    if (!(_.isArray(list))) return undefined;
     let result = [];
     for (let i = 0; i < list.length - length; i++) {
       result.push(list[i]);
@@ -24,7 +24,7 @@ const array = {
   },
 
   last: function(list, length = 1) {
-    if (!(list instanceof Array)) {
+    if (!(_.isArray(list))) {
       return undefined;
     } else if (length === 1) {
       return list[0];
@@ -37,7 +37,7 @@ const array = {
   },
 
   rest: function(list, length = 1) {
-    if (!(list instanceof Array)) return undefined;
+    if (!(_.isArray(list))) return undefined;
     let result = [];
     for (let i = length; i < list.length; i++) {
       result.push(list[i]);
@@ -46,13 +46,13 @@ const array = {
   },
 
   flatten: function (list, isSingle) {
-    if (!(list instanceof Array)) return [];
+    if (!(_.isArray(list))) return [];
     let result = [];
     function inner(list, isSingle, result) {
-      if (list instanceof Array) {
+      if (_.isArray(list)) {
         for (let i = 0; i < list.length; i++){
           if (isSingle) {
-            if (list[i] instanceof Array) {
+            if (_.isArray(list[i])) {
               result.push(...list[i]);
             } else {
               result.push(list[i]);
@@ -71,7 +71,7 @@ const array = {
   },
 
   without: function (list, ...rest) {
-    if (!(list instanceof Array)) return [];
+    if (!(_.isArray(list))) return [];
     let result = [];
     for (item of list) {
       for (value of rest) {
@@ -88,7 +88,7 @@ const array = {
     let list = [];
     let jumpList = [];
     for (value of rest) {
-      if (value instanceof Array) {
+      if (_.isArray(value)) {
         list.push(...value);
       }
     }
@@ -111,7 +111,7 @@ const array = {
       return rest[0];
     }
     for (value of rest) {
-      if (!(value instanceof Array)) {
+      if (!(_.isArray(value))) {
         return [];
       }
     }
@@ -129,7 +129,7 @@ const array = {
   },
 
   difference: function (list, ...rest) {
-    if (!(list instanceof Array)) return [];
+    if (!(_.isArray(list))) return [];
     let jumpList = [];
     let result = [];
     for (value of rest) {
@@ -144,7 +144,7 @@ const array = {
   },
 
   uniq: function (list, hasSort, callback) {
-    if (!(list instanceof Array)) return [];
+    if (!(_.isArray(list))) return [];
     const _callback = callback || (data => data);
     let result = [];
     let jumpList = [];
@@ -188,7 +188,7 @@ const array = {
   },
 
   unzip: function (list) {
-    if (!(list instanceof Array)) return [];
+    if (!(_.isArray(list))) return [];
     let result = [];
     for (let i = 0; i < list.length; i++) {
       for (let j = 0; j < list[i].length; j++) {
@@ -204,7 +204,7 @@ const array = {
   },
 
   object: function (list, values) {
-    if (!(list instanceof Array)) return {};
+    if (!(_.isArray(list))) return {};
     let result = {};
     if (values) {
       for (let i = 0; i < list.length; i++) {
@@ -219,7 +219,7 @@ const array = {
   },
 
   chunk: function (list, length) {
-    if (!(list instanceof Array) || typeof length !== 'number' || length < 1) return [];
+    if (!_.isArray(list) || !_.isNumber(length) || length < 1) return [];
     let result = [];
     let item = [];
     for (let i = 0; i < list.length; i++) {
@@ -236,7 +236,7 @@ const array = {
   },
 
   indexOf: function (list, value, hasSort) {
-    if (!(list instanceof Array)) return -1;
+    if (!(_.isArray(list))) return -1;
     let result = -1;
     if (hasSort) {
       function findIndex(list, value, start, end) { // 二分法查找
@@ -263,8 +263,8 @@ const array = {
   },
 
   lastIndexOf: function (list, value, lastIndex) {
-    if (!(list instanceof Array)) return -1;
-    const _lastIndex = typeof lastIndex === 'number' ? lastIndex : 0;
+    if (!(_.isArray(list))) return -1;
+    const _lastIndex = _.isNumber(lastIndex) ? lastIndex : 0;
     let result = -1;
     for (let i = list.length - 1 - _lastIndex; i >= 0; i--) {
       if (list[i] === value) {
@@ -275,9 +275,9 @@ const array = {
   },
 
   sortedIndex: function (list, value, callback, context) {
-    if (!(list instanceof Array)) return 0;
+    if (!(_.isArray(list))) return 0;
     const _callback = callback ?
-      (typeof callback === 'age' ? item => item[callback] : callback)
+      (_.isString(callback) ? item => item[callback] : callback)
       : item => item;
     const __callback = context ? _callback.bind(context) : _callback;
     for (let i = 0; i < list.length; i++) {
@@ -289,7 +289,7 @@ const array = {
   },
 
   findIndex: function (list, callback, context) {
-    if (!(list instanceof Array) || !(callback instanceof Function)) return -1;
+    if (!(_.isArray(list)) || !(_.isFunction(callback))) return -1;
     const _callback = context ? callback.bind(context) : callback;
     for (let i = 0; i < list.length; i++) {
       if (_callback(list[i], i, list)) return i;
@@ -298,7 +298,7 @@ const array = {
   },
 
   findLastIndex: function (list, callback, context) {
-    if (!(list instanceof Array) || !(callback instanceof Function)) return -1;
+    if (!(_.isArray(list)) || !(_.isFunction(callback))) return -1;
     const _callback = context ? callback.bind(context) : callback;
     for (let i = list.length - 1; i >= 0; i++) {
       if (_callback(list[i], i, list)) return i;

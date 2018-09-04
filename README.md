@@ -72,23 +72,31 @@ functions.js                        函数类方法
     - wrap
     - negate
     - compose
+    - restArguments
 
 objects.js                          对象类方法
     - keys
+    - allKeys
     - values
+    - mapObject
     - pairs
     - invert
+    - create
     - functions
+    - findKey
     - extend
+    - extendOwn
     - pick
     - omit
     - defaults
     - clone
     - tap
     - has
-    - matches
     - property
+    - propertyOf
+    - matcher
     - isEqual
+    - isMatch
     - isEmpty
     - isElement
     - isArray
@@ -101,6 +109,12 @@ objects.js                          对象类方法
     - isBoolean
     - isDate
     - isRegExp
+    - isError
+    - isSymbol
+    - isMap
+    - isWeakMap
+    - isSet
+    - isWeakSet
     - isNaN
     - isNull
     - isUndefined

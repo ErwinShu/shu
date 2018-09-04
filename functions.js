@@ -1,12 +1,14 @@
 const _ = require('./shu.js');
 
 const functions = {
-  bind: function() {
-
+  bind: function(func, context, ...argument) {
+    return func.bind(context, ...argument);
   },
   
-  bindAll: function() {
-
+  bindAll: function(object, ...name) {
+    for (item of name) {
+      object[item] = object[item].bind(object);
+    }
   },
   
   partial: function() {

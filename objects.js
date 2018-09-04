@@ -1,126 +1,239 @@
 const _ = require('./shu.js');
 
 const objects = {
-  keys: function() {
+  keys: function (object) {
+    let result = [];
+    for (item in object) {
+      if (object.hasOwnProperty(item)) {
+        result.push(item);
+      }
+    }
+    return result;
+  },
 
+  allKeys: function (object) {
+    let result = [];
+    for (item in object) {
+      result.push(item);
+    }
+    return result;
   },
   
-  values: function() {
-
+  values: function(object) {
+    let result = [];
+    for (item in object) {
+      if (object.hasOwnProperty(item)) {
+        result.push(object[item]);
+      }
+    }
+    return result;
   },
   
-  pairs: function() {
+  mapObject: function (object, callback, context) {
+    if (!callback) return object;
+    const _callback = context ? callback.bind(context) : callback;
+    let result = {};
+    for (item in object) {
+      if (object.hasOwnProperty(item)) {
+        result[item] = _callback(object[item], item, object);
+      }
+    }
+    return result;
+  },
+
+  pairs: function (object) {
+    let result = [];
+    for (key in object) {
+      if (object.hasOwnProperty(key)) {
+        const item = [key, object[key]];
+        result.push(item);
+      }
+    }
+    return result;
+  },
+
+  invert: function(object) {
+    let result = {};
+    for (key in object) {
+      if (object.hasOwnProperty(key)) {
+        result[object[key]] = key;
+      }
+    }
+    return result;
+  },
+
+  create: function(prototype, props) {
+    const ctor = function () { };
+    ctor.prototype = prototype;
+    const result = new ctor;
+    if (props) {
+      _.mapObject(props, (value, key) => {
+        result[key] = value;
+      });
+    }
+    return result;
+  },
+
+  functions: function(obj) {
+    let result = [];
+    for (key in obj) {
+      if (typeof obj[key] === 'function') {
+        result.push(key);
+      }
+    }
+    return _.sort(result);
+  },
+
+  findKey: function(obj, callback, context) {
 
   },
-  
-  invert: function() {
 
-  },
-  
-  functions: function() {
-
-  },
-  
   extend: function() {
 
   },
-  
+
+  extendOwn: function() {
+
+  },
+
   pick: function() {
 
   },
-  
+
   omit: function() {
 
   },
-  
+
   defaults: function() {
 
   },
-  
+
   clone: function() {
 
   },
-  
+
   tap: function() {
 
   },
-  
+
   has: function() {
 
   },
-  
-  matches: function() {
 
-  },
-  
   property: function() {
 
   },
-  
+
+  propertyOf: function() {
+
+  },
+
+  matcher: function() {
+
+  },
+
   isEqual: function() {
 
   },
-  
-  isEmpty: function() {
+
+  isMatch: function() {
 
   },
-  
-  isElement: function() {
 
+  isEmpty: function(ele) {
+    if (_.isArray(ele)) {
+      return !ele.length;
+    } else if (_.isObject(ele)) {
+      return !_.keys(ele).length;
+    } else {
+      return !ele;
+    }
   },
-  
-  isArray: function() {
 
+  isElement: function(ele) {
+    return _.contains(Object.prototype.toString.call(ele), 'HTML');
   },
-  
-  isObject: function() {
 
+  isArray: function(ele) {
+    return Object.prototype.toString.call(ele) === '[object Array]';
   },
-  
-  isArguments: function() {
 
+  isObject: function(ele) {
+    return Object.prototype.toString.call(ele) === '[object Object]';
   },
-  
-  isFunction: function() {
 
+  isArguments: function(ele) {
+    return Object.prototype.toString.call(ele) === '[object Arguments]';
   },
-  
-  isString: function() {
 
+  isFunction: function(ele) {
+    return Object.prototype.toString.call(ele) === '[object Function]';
   },
-  
-  isNumber: function() {
 
+  isString: function(ele) {
+    return Object.prototype.toString.call(ele) === '[object String]';
   },
-  
-  isFinite: function() {
 
+  isNumber: function(ele) {
+    return Object.prototype.toString.call(ele) === '[object Number]';
   },
-  
-  isBoolean: function() {
 
+  isFinite: function(ele) {
+    if (_.isNumber(ele)) {
+      return ele !== Infinity && ele !== -Infinity;
+    } else {
+      return false;
+    }
   },
-  
-  isDate: function() {
 
+  isBoolean: function(eleele) {
+    return Object.prototype.toString.call(ele) === '[object Boolean]';
   },
-  
-  isRegExp: function() {
 
+  isDate: function(eleele) {
+    return Object.prototype.toString.call(ele) === '[object Date]';
   },
-  
-  isNaN: function() {
 
+  isRegExp: function(ele) {
+    return Object.prototype.toString.call(ele) === '[object RegExp]';
   },
-  
-  isNull: function() {
 
+  isError: function(ele) {
+    return Object.prototype.toString.call(ele) === '[object Error]';
   },
-  
-  isUndefined: function() {
 
+  isSymbol: function(ele) {
+    return Object.prototype.toString.call(ele) === '[object Symbol]';
   },
-  
+
+  isMap: function(ele) {
+    return Object.prototype.toString.call(ele) === '[object Map]';
+  },
+
+  isWeakMap: function(ele) {
+    return Object.prototype.toString.call(ele) === '[object WeakMap]';
+  },
+
+  isSet: function(ele) {
+    return Object.prototype.toString.call(ele) === '[object Set]';
+  },
+
+  isWeakSet: function(ele) {
+    return Object.prototype.toString.call(ele) === '[object WeakSet]';
+  },
+
+  isNaN: function(ele) {
+    return Number.isNaN(ele);
+  },
+
+  isNull: function(ele) {
+    return Object.prototype.toString.call(ele) === '[object Null]';
+  },
+
+  isUndefined: function(ele) {
+    return Object.prototype.toString.call(ele) === '[object Undefined]';
+  },
+
 };
 
 export default objects;
