@@ -11,8 +11,19 @@ const functions = {
     }
   },
   
-  partial: function() {
-
+  partial: function (func, ...argument) {
+    let indexList = [];
+    for (let i = 0; i < argument.length; i++) {
+      if (argument[i] === _) indexList.push(i);
+    }
+    return (...arg) => {
+      let i = 0;
+      for (value of indexList) {
+        argument[value] = arg[i];
+        i++;
+      }
+      return func(...argument)
+    }
   },
   
   memoize: function() {

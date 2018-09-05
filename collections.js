@@ -5,12 +5,12 @@ const collections = {
     const _callback = context ? callback.bind(context) : callback;
     if (_.isArray(obj)) {
       for (let i = 0; i < obj.length; i++) {
-        _callback(obj[i]);
+        _callback(obj[i], i, obj);
       }
     } else {
       const keys = _.keys(obj);
       for (let i = 0; i < keys.length; i++) {
-        _callback(obj[keys[i]]);
+        _callback(obj[keys[i]], keys[i], obj);
       }
     }
     return obj;
@@ -22,14 +22,14 @@ const collections = {
     if (_.isArray(obj)) {
       let result = [];
       for (let i = 0; i < obj.length; i++) {
-        result.push(_callback(obj[i]));
+        result.push(_callback(obj[i], i, obj));
       }
       return result;
     } else {
       const keys = _.keys(obj);
       const result = {};
       for (let i = 0; i < keys.length; i++) {
-        result[keys[i]] = _callback(obj[keys[i]]);
+        result[keys[i]] = _callback(obj[keys[i]], keys[i], obj);
       }
       return result;
     }

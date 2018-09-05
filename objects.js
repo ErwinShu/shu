@@ -67,7 +67,7 @@ const objects = {
     ctor.prototype = prototype;
     const result = new ctor;
     if (props) {
-      _.mapObject(props, (value, key) => {
+      _.each(props, (value, key) => {
         result[key] = value;
       });
     }
@@ -85,59 +85,166 @@ const objects = {
   },
 
   findKey: function(obj, callback, context) {
-
+    if (!(_.Object(obj)) || !(_.isFunction(callback))) return undefined;
+    const _callback = context ? callback.bind(context) : callback;
+    let result;
+    for (key in obj) {
+      if (obj.hasOwnProperty(key) && _callback(obj[key], key, obj)) {
+        return key;
+      };
+    }
+    return result;
   },
 
-  extend: function() {
-
+  extend: function(obj, ...rest) {
+    for (item of rest) {
+      if (_.isObject(item)) {
+        for (key in item) {
+          obj[key] = item[key];
+        }
+      }
+    }
+    return obj;
   },
 
-  extendOwn: function() {
-
+  extendOwn: function(obj, ...rest) {
+    for (item of rest) {
+      if (_.isObject(item)) {
+        _.each(item, (value, key) => {
+          obj[key] = value;
+        });
+      }
+    }
+    return obj;
   },
 
-  pick: function() {
-
+  pick: function (obj, ...rest) {
+    const result = {};
+    for (key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        const fit = _.isFunction(rest[0]) ? rest[0](obj[key], key, obj) : _.contains(rest, key);
+        if (fit) {
+          result[key] = obj[key];
+        }
+      }
+    }
+    return result;
   },
 
-  omit: function() {
-
+  omit: function(obj, ...rest) {
+    const result = {};
+    for (key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        const fit = _.isFunction(rest[0]) ? !rest[0](obj[key], key, obj) : !_.contains(rest, key);
+        if (fit) {
+          result[key] = obj[key];
+        }
+      }
+    }
+    return result;
   },
 
   defaults: function() {
-
+    for (item of rest) {
+      if (_.isObject(item)) {
+        _.each(item, (value, key) => {
+          if (!obj.hasOwnProperty(key)) {
+            obj[key] = value;
+          }
+        });
+      }
+    }
+    return obj;
   },
 
-  clone: function() {
-
+  clone: function(ele) {
+    if (_.isArray(ele)) {
+      return [...ele];
+    } else if (_.isObject) {
+      return _.extend({}, ele);
+    } else {
+      return ele;
+    }
   },
 
   tap: function() {
 
   },
 
-  has: function() {
-
+  has: function (obj, key) {
+    if (_.isArray(key)) {
+      for (item of key) {
+        if (!Object.prototype.hasOwnProperty.call(obj, item)) {
+          return false;
+        }
+      }
+      return true;
+    } else {
+      return Object.prototype.hasOwnProperty.call(obj, key);
+    }
   },
 
-  property: function() {
-
+  property: function(path) {
+    if (_.isArray(path)) {
+      return (obj) => {
+        let result = obj;
+        for (key of path) {
+          result = result[key];
+          if (!result) return result; 
+        }
+        return result;
+      }
+    } else {
+      return obj => obj[path];
+    }
   },
 
-  propertyOf: function() {
-
+  propertyOf: function(obj) {
+    return (path) => {
+      if (_.isArray(path)) {
+        let result = obj;
+        for (key of path) {
+          result = result[key];
+          if (!result) return result;
+        }
+        return result;
+      }
+    }
   },
 
-  matcher: function() {
-
+  matcher: function(other) {
+    return (obj) => {
+      return _.isMatch(obj, other);
+    };
   },
 
-  isEqual: function() {
-
+  isEqual: function(obj, other) {
+    if (_.isArray(obj)) {
+      if (obj.length !== other.length) return false;
+      for (let i = 0; i < obj.length; i++) {
+        if (!_.isEqual(obj[i], other[i])) return false;
+      }
+      return true;
+    } else if (_.isObject(obj)) {
+      const objKeys = _.keys(obj);
+      const otherKeys = _.keys(other);
+      if (objKeys.length !== otherKeys.length) return false;
+      for (key of objKeys) {
+        if (!_.isEqual(obj[key], other[key])) return false;
+      }
+      return true;
+    } else {
+      return obj === other;
+    }
   },
 
-  isMatch: function() {
-
+  isMatch: function (obj, other) {
+    if (!_.isObject(other)) return false;
+    const keyList = _.keys(other);
+    for (key of keyList) {
+      if (!(obj[key] === other[key])) return false;
+    }
+    return true;
   },
 
   isEmpty: function(ele) {
@@ -158,7 +265,7 @@ const objects = {
     return Object.prototype.toString.call(ele) === '[object Array]';
   },
 
-  isObject: function(ele) {
+  isObject: function(ele) { // 这个函数和underscore不同，只识别obj
     return Object.prototype.toString.call(ele) === '[object Object]';
   },
 
