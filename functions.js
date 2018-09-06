@@ -30,8 +30,8 @@ const functions = {
 
   },
   
-  delay: function() {
-
+  delay: function(func, time = 0, ...argument) {
+    return setTimeout(() => func(...argument), time);
   },
   
   defer: function() {
