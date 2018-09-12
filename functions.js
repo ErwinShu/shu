@@ -26,16 +26,24 @@ const functions = {
     }
   },
   
-  memoize: function() {
-
+  memoize: function(func, keyFunc) {
+    const result = (key, ...arg) => {
+      const address = keyFunc ? keyFunc(key, ...arg) : key;
+      if (!result.cache.hasOwnProperty(address)) {
+        result.cache[address] = func(key, ...arg);
+      }
+      return func(key, ...arg);
+    };
+    result.cache = {};
+    return result;
   },
   
   delay: function(func, time = 0, ...argument) {
     return setTimeout(() => func(...argument), time);
   },
   
-  defer: function() {
-
+  defer: function(func, ...argument) {
+    return setTimeout(() => func(...argument), 0);
   },
   
   throttle: function() {
@@ -66,8 +74,18 @@ const functions = {
 
   },
   
-  compose: function() {
-
+  compose: function(...func) {
+    return function (...arg) {
+      let result;
+      for (let i = func.length - 1; i >= 0; i--) {
+        if (result) {
+          result = func[i](result);
+        } else {
+          result = func[i](...arg);
+        }
+      }
+      return result;
+    };
   },
   
 };
