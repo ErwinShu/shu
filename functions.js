@@ -46,11 +46,21 @@ const functions = {
     return setTimeout(() => func(...argument), 0);
   },
   
-  throttle: function() {
-
+  throttle: function(func, time, option) { // 不懂怎么限制前后端使用
+    const result = (...arg) => {
+      clearTimeout(result.loading);
+      result.timer = setTimeout(() => {
+        result.loading = false;
+      }, time);
+      if (!result.loading) {
+        result.loading = true;
+        return func(...arg);
+      }
+    }
+    return result;
   },
   
-  debounce: function() {
+  debounce: function(func, time, immediate) {
 
   },
   

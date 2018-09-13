@@ -1,8 +1,8 @@
 const _ = require('./shu.js');
 
 const utility = {
-  noConflict() {
-
+  noConflict(value) {
+    return value;
   },
   
   identity() {
@@ -50,7 +50,7 @@ const utility = {
   },
   
   now() {
-
+    return new Date().valueOf();
   },
   
   template() {
