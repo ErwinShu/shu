@@ -61,27 +61,68 @@ const functions = {
   },
   
   debounce: function(func, time, immediate) {
-
+    const result = (...arg) => {
+      clearTimeout(result.loading);
+      result.timer = setTimeout(() => {
+        result.loading = !immediate;
+      }, time);
+      if (immediate ? !result.loading : result.loading) {
+        result.loading = immediate;
+        return func(...arg);
+      }
+    }
+    return result;
   },
   
-  once: function() {
-
+  once: function(func) {
+    const result = (...arg) => {
+      if (!result.isUse) {
+        result.isUse = true;
+        return func(...arg);
+      }
+    }
+    return result;
   },
   
-  after: function() {
-
+  after: function(count, func) {
+    const result = (...arg) => {
+      if (result.count) {
+        result.count += 1;
+      } else {
+        result.count = 1;
+      }
+      if (result.count === count) {
+        return func(...arg);
+      }
+    };
+    return result;
   },
   
-  before: function() {
-
+  before: function(count, func) {
+    const result = (...arg) => {
+      if (result.count) {
+        result.count += 1;
+      } else {
+        result.count = 1;
+      }
+      if (result.count < count) {
+        result.end = func(...arg);
+      }
+      return result.end;
+    };
+    return result;
   },
   
-  wrap: function() {
-
+  wrap: function(func, wrapper) {
+    return (...arg) => {
+      return wrapper(func, ...arg);
+    };
   },
   
-  negate: function() {
-
+  negate: function(func) {
+    return (...arg) => {
+      return !func(...arg);
+    };
   },
   
   compose: function(...func) {
