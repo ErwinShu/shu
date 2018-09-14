@@ -2,7 +2,7 @@ const _ = require('./shu.js');
 
 const utility = {
   noConflict: function () {
-    window._ = window.prevousUnderscore;
+    window._ = this.prevousUnderscore;
     return this;
   },
   
@@ -44,7 +44,15 @@ const utility = {
   },
   
   iteratee: function (value, context) {
-
+    if (_.isObject(value)) {
+      return _.matcher(value);
+    } else if (_.isFunction(value)) {
+      return value.bind(context);
+    } else if (_.isNull(value)) {
+      return value => value;
+    } else {
+      return _.property(value);
+    }
   },
   
   uniqueId: function (key) {
@@ -92,6 +100,10 @@ const utility = {
   },
   
   template: function (string, ) {
+
+  },
+
+  templateSetting: {
 
   },
   

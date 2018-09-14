@@ -4,16 +4,20 @@ const functions = require('./functions');
 const objects = require('./objects');
 const utility = require('./utility');
 
-const shu = function() {}
-
-const previousUnderscore = window._;
-
-shu.prototype = {
-    ...collections,
-    ...array,
-    ...functions,
-    ...objects,
-    ...utility,
-};
-
-export default shu;
+(function () {
+    const shu = function (obj) {
+        if (obj instanceof shu) return obj;
+        if (!(this instanceof shu)) return new shu(obj);
+        this.wrapped = obj;
+    }
+    
+    shu.previousUnderscore = window._;
+    
+    shu.prototype = {
+        ...collections,
+        ...array,
+        ...functions,
+        ...objects,
+        ...utility,
+    };
+})()

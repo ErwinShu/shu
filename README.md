@@ -135,7 +135,7 @@ utility.js                          工具类方法
     - now
     - template
 
-chainning.js                        链式调用方法
+chaining.js                        链式调用方法
     -chain
     -value
 
