@@ -6,6 +6,8 @@ const utility = require('./utility');
 
 const shu = function() {}
 
+const previousUnderscore = window._;
+
 shu.prototype = {
     ...collections,
     ...array,
