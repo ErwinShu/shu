@@ -1,4 +1,4 @@
-# Shu Javascript Library
+# Underscore Javascript Library
 
 ## 1. 说明
 
@@ -7,7 +7,7 @@
 ## 2. 结构
 
 ```
-collections.js                      搜集类方法
+Collections                      搜集类方法
     - each
     - map
     - reduce
@@ -34,7 +34,7 @@ collections.js                      搜集类方法
     - size
     - partition
 
-array.js                            数组类方法
+Arrays                            数组类方法
     - first
     - initial
     - last
@@ -57,7 +57,7 @@ array.js                            数组类方法
     - findLastIndex
     - range
 
-functions.js                        函数类方法
+Functions                        函数类方法
     - bind
     - bindAll
     - partial
@@ -74,7 +74,7 @@ functions.js                        函数类方法
     - compose
     - restArguments
 
-objects.js                          对象类方法
+Objects                          对象类方法
     - keys
     - allKeys
     - values
@@ -119,7 +119,7 @@ objects.js                          对象类方法
     - isNull
     - isUndefined
 
-utility.js                          工具类方法
+Utility                          工具类方法
     - noConflict
     - identity
     - constant
@@ -135,9 +135,8 @@ utility.js                          工具类方法
     - now
     - template
 
-chaining.js                        链式调用方法
+Chaining                        链式调用方法
     -chain
     -value
 
-shu.js                              总文件集合
 ```
