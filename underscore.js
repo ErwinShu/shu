@@ -1,26 +1,19 @@
-
-const collections = require('./collections');
-const array = require('./array');
-const functions = require('./functions');
-const objects = require('./objects');
-const utility = require('./utility');
-
 (function () {
-  const shu = function (obj) {
-    if (obj instanceof shu) return obj;
-    if (!(this instanceof shu)) return new shu(obj);
+  const _ = function (obj) {
+    if (obj instanceof _) return obj;
+    if (!(this instanceof _)) return new _(obj);
     this.wrapped = obj;
   };
   
-  shu.previousUnderscore = window._;
+  _.previousUnderscore = window._;
 
-  shu.templateSettings = {
+  _.templateSettings = {
       evaluate: /<%([\s\S]+?)%>/g,
       interpolate: /<%=([\s\S]+?)%>/g,
       escape: /<%-([\s\S]+?)%>/g,
   };
   
-  shu.prototype = {
+  _.prototype = {
     each: function(obj, callback, context) {
       const _callback = context ? callback.bind(context) : callback;
       if (_.isArray(obj)) {
@@ -896,8 +889,22 @@ const utility = require('./utility');
       };
     },
 
-    restArguments: function (func, startIndex) {
-      
+    restArguments: function (func, startIndex = 0) {
+      return (...res) => {
+        let arg = [];
+        let rest = [];
+        for (let i = 0; i < res.length; i++) {
+          if (i < startIndex) {
+            arg.push(res[i]);
+          } else {
+            rest.push(res[i]);
+          }
+          if (i === res.length - 1 && rest[0]) {
+            arg.push(rest);
+          }
+        }
+        return func(...arg);
+      };
     },
     
     keys: function (object) {
@@ -1066,8 +1073,9 @@ const utility = require('./utility');
       }
     },
   
-    tap: function() {
-  
+    tap: function(obj, func) {
+      func(obj);
+      return obj;
     },
   
     has: function (obj, key) {
@@ -1338,13 +1346,30 @@ const utility = require('./utility');
       return new Date().valueOf();
     },
     
-    template: function (string, setting) {
+    template: function (string, setting) { // 部分实现，不支持自定义
       return (obj) => {
-        const templateSetting = _.pick({ ...setting, ...this.templateSetting }, 'evaluate', 'interpolate', 'escape');
-        const regexp = new RegExp(_.values(templateSetting).join('|'), 'g');
-        const result = string.replace(regexp, (value) => {
-          const key = value.replace(/<%|<%=|<%-|%>/g, '');
-          return obj[key];
+        const templateSettings = _.pick(
+          { ...setting, ...this.templateSettings },
+          'evaluate',
+          'interpolate',
+          'escape',
+        );
+        const _templateSettings = _.mapObject(templateSettings, (item) => {
+          const _item = item.toString();
+          return _item.replace(/^\/|\/([gim]?)$/g, '');
+        });
+        const regexp = new RegExp(_.values(_templateSettings).join('|'), 'g');
+        const result = string.replace(regexp, (value, key) => {
+          if (value.match('<%=')) {
+            return obj[key.trim()];
+          } else if (value.match('<%-')) {
+            const result = _.escape(obj[key.trim()]);
+            return result;
+          } else if (value.match('<%')) {
+            const key = value.replace(/<%|%>/g, '');
+            const result = obj[key.trim()];
+            return result;
+          }
         });
         return result;
       };

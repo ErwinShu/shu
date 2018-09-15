@@ -8,12 +8,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ErwinShu/underscore.git"
+    "url": "git+https://github.com/ErwinShu/shu.git"
   },
   "author": "chenshu",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/ErwinShu/underscore/issues"
+    "url": "https://github.com/ErwinShu/shu/issues"
   },
-  "homepage": "https://github.com/ErwinShu/underscore#readme"
+  "homepage": "https://github.com/ErwinShu/shu#readme"
 }
